@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Tạo project · Content Factory{% endblock %}
+{% block content %}
+<header class="page-head centered"><h1>Tạo project</h1><p>Một prompt. Director, Writer, Reviewer và Rewriter sẽ lên kế hoạch, viết, kiểm tra và hoàn thiện nội dung.</p></header>
+{% if error %}<p class="notice error">{{ error }}</p>{% endif %}
+{% if clone_source %}<p class="notice">Đang sao chép thiết lập từ <strong>{{ clone_source.name }}</strong>. Nội dung đã tạo sẽ không được sao chép.</p>{% endif %}
+<form class="panel form" method="post" action="{{ url_for('create_job') }}" data-generation-form>
+  <label>Prompt<textarea name="user_promt" rows="6" minlength="3" maxlength="20000" required placeholder="Bạn muốn tạo nội dung gì?">{{ form.get('user_promt', '') }}</textarea></label>
+  <div class="grid two creation-options">
+    {% set selected_type = form.get('niche','story') %}
+    <fieldset class="type-selector">
+      <legend>Loại nội dung</legend>
+      <div class="type-tags">
+        {% for value,label in [('story','Story'),('fact','Fact'),('news','News'),('music','Music'),('video','Video')] %}
+        <label class="type-tag"><input type="radio" name="niche" value="{{ value }}" {% if selected_type == value %}checked{% endif %}><span>{{ label }}</span></label>
+        {% endfor %}
+      </div>
+    </fieldset>
+    {% set duration_max = 8 if selected_type == 'music' else 60 %}
+    {% set selected_duration = form.get('duration_minutes', 10)|int %}
+    {% if selected_duration > duration_max %}{% set selected_duration = duration_max %}{% endif %}
+    <label class="duration-field">
+      <span class="duration-heading">Thời lượng nội dung <output data-duration-value for="duration-minutes">{{ selected_duration }}</output> phút</span>
+      <input id="duration-minutes" name="duration_minutes" type="range" min="1" max="{{ duration_max }}" step="1" value="{{ selected_duration }}" aria-label="Thời lượng nội dung, tính bằng phút" data-duration-range>
+      <span class="duration-range" aria-hidden="true"><span>1 phút</span><span data-duration-max>{{ duration_max }} phút</span></span>
+    </label>
+  </div>
+  <fieldset class="output-picker"><legend>Ngôn ngữ đầu ra: <span class="language-selection-count" data-language-count>Chưa chọn ngôn ngữ nào</span></legend>
+    <p class="output-help">30 lựa chọn ngôn ngữ phổ biến trên các thị trường YouTube lớn.</p>
+    <div class="language-picker">
+      {% set selected_languages = form.get('languages', []) %}
+      <label class="language-search">Tìm ngôn ngữ<input type="search" data-language-search placeholder="Nhập tên ngôn ngữ..."></label>
+      <div class="language-list" aria-label="Danh sách ngôn ngữ">
+        {% for code,name in output_languages %}<label class="language-tag" data-language-option data-language-name="{{ name|lower }}"><input type="checkbox" value="{{ code }}" {% if code in selected_languages %}checked{% endif %}><span>{{ name }}</span></label>{% endfor %}
+      </div>
+      <div data-language-inputs hidden></div>
+    </div>
+  </fieldset>
+  <details><summary>Tùy chọn khác</summary><div class="grid two details-body">
+    <label>Sub-niche<input name="sub_niche" maxlength="300" value="{{ form.get('sub_niche','') }}" placeholder="Horror, science, AI..."></label>
+    <label>Style<input name="style" maxlength="500" value="{{ form.get('style','') }}" placeholder="Cinematic, documentary..."></label>
+    <label>Tone<input name="tone" maxlength="500" value="{{ form.get('tone','') }}" placeholder="Dark, calm, analytical..."></label>
+    <label>Audience<input name="audience" maxlength="500" value="{{ form.get('audience','') }}" placeholder="General audience"></label>
+    <label class="full">Hướng dẫn thêm<textarea name="extra_instructions" rows="3" maxlength="12000">{{ form.get('extra_instructions','') }}</textarea></label>
+  </div></details>
+  <div class="form-actions"><button class="button primary" type="submit">Tạo project</button></div>
+</form>
+{% endblock %}

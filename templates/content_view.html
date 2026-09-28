@@ -1,0 +1,3 @@
+{% extends "base.html" %}
+{% block title %}{{ project.name }} · Content Factory{% endblock %}
+{% block content %}<p class="breadcrumb"><a href="{{ url_for('detail_page', job_id=project.id) }}">← Project</a></p><header class="page-head row-between"><h1>{{ project.name }}</h1><a class="button" href="{{ url_for('download_file_from_api', job_id=project.id, file_path='content.md') }}">Tải file MD</a></header><article class="panel markdown">{{ content|safe }}</article>{% endblock %}

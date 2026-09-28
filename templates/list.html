@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Projects · Content Factory{% endblock %}
+{% block content %}
+<header class="page-head row-between"><div><h1>Projects</h1><p>Tất cả project đang chạy và đã tạo.</p></div><div class="queue-summary"><span><b>{{ queue.running_count }}</b> đang chạy</span><span><b>{{ queue.queued_count }}</b> đang chờ</span><span>{{ queue.max_concurrent }} đồng thời tối đa</span></div></header>
+<form id="bulk-delete" method="post" action="{{ url_for('bulk_delete_jobs_from_form') }}"><input type="hidden" name="confirm" value="Delete"></form>
+{% if projects %}<div class="bulk-bar"><span class="selection-count" data-selection-count aria-live="polite">Đã chọn 0 project</span><button form="bulk-delete" class="button danger" type="submit" data-bulk-delete disabled>Xóa mục đã chọn</button></div>{% endif %}
+  <div class="table-wrap"><table><thead><tr><th class="select-column"><input id="select-all-projects" type="checkbox" data-select-all aria-label="Chọn tất cả project"></th><th>Project</th><th>Loại</th><th>Trạng thái</th><th>Tiến độ</th><th>Thao tác</th></tr></thead><tbody>
+  {% for project in projects %}<tr data-project-row="{{ project.id }}">
+    <td class="select-column"><input form="bulk-delete" class="project-select" type="checkbox" name="project_ids" value="{{ project.id }}" aria-label="Chọn {{ project.name }}"></td>
+    <td><a data-project-name class="project-title" href="{{ url_for('detail_page', job_id=project.id) }}">{{ project.name }}</a><small>{{ project.request.duration_minutes }} phút · {{ output_languages_by_project[project.id]|join(', ') }} · {{ project.created_at }}</small></td>
+    <td>{{ project.request.niche }}</td><td><span data-project-status class="status {{ project.status.value }}">{{ project.status.value }}</span></td>
+    <td><progress data-project-progress value="{{ project.progress }}" max="100"></progress><small><span data-project-progress-label>{{ project.progress }}%</span> · <span data-project-stage>{{ project.stage }}</span></small></td>
+    <td class="actions"><a href="{{ url_for('content_page', job_id=project.id) }}">Xem nội dung</a><a href="{{ url_for('home_page', clone=project.id) }}">Clone</a>
+      {% if project.status.value in ('queued','running') %}<form method="post" action="{{ url_for('cancel_job_from_page', job_id=project.id) }}"><button class="text-button danger-text" type="submit">Dừng</button></form>{% endif %}
+      <form method="post" action="{{ url_for('delete_job_from_page', job_id=project.id) }}" data-confirm-delete="Bạn có chắc muốn xóa project này?"><input type="hidden" name="confirm" value="Delete"><button class="text-button danger-text" type="submit">Xóa</button></form>
+    </td>
+  </tr>{% else %}<tr><td colspan="6" class="empty">Chưa có project nào. <a href="{{ url_for('home_page') }}">Tạo project đầu tiên</a>.</td></tr>{% endfor %}
+  </tbody></table></div>
+{% endblock %}
