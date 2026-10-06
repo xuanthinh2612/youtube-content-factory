@@ -17,37 +17,6 @@
   });
 
   const eventsList = document.querySelector("[data-project-events]");
-
-  function setupEventContent(item) {
-    const message = item.querySelector(".event-content");
-    if (!message) return;
-
-    let toggle = item.querySelector("[data-event-content-toggle]");
-    if (!toggle) {
-      toggle = document.createElement("button");
-      toggle.type = "button";
-      toggle.className = "event-content-toggle";
-      toggle.dataset.eventContentToggle = "";
-      toggle.textContent = "Xem thêm";
-      toggle.setAttribute("aria-expanded", "false");
-      toggle.addEventListener("click", () => {
-        const expanded = toggle.getAttribute("aria-expanded") === "true";
-        toggle.setAttribute("aria-expanded", String(!expanded));
-        toggle.textContent = expanded ? "Xem thêm" : "Thu gọn";
-        message.classList.toggle("is-collapsed", expanded);
-      });
-      message.after(toggle);
-    }
-
-    if (toggle.getAttribute("aria-expanded") === "true") return;
-    message.classList.add("is-collapsed");
-    toggle.hidden = message.scrollHeight <= message.clientHeight + 1;
-  }
-
-  eventsList.querySelectorAll("[data-event-id]").forEach(setupEventContent);
-  window.addEventListener("resize", () => {
-    eventsList.querySelectorAll("[data-event-id]").forEach(setupEventContent);
-  });
   const seenEvents = new Set(
     [...eventsList.querySelectorAll("[data-event-id]")].map((item) => item.dataset.eventId),
   );
@@ -84,7 +53,7 @@
     item.append(heading);
     if (event.message_html) {
       const message = document.createElement("article");
-      message.className = "event-content markdown is-collapsed";
+      message.className = "event-content markdown";
       message.innerHTML = event.message_html;
       item.append(message);
     } else if (event.message) {
@@ -94,7 +63,6 @@
       item.append(message);
     }
     eventsList.prepend(item);
-    setupEventContent(item);
 
     const state = agentStates.get(agentName) || { status: "idle", message: "" };
     if (event.type === "node_success") state.status = "success";
