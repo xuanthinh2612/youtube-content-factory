@@ -1,6 +1,7 @@
 import json
 import threading
 from io import BytesIO
+from pathlib import Path
 
 from flask import Flask, Response, abort, jsonify, redirect, render_template, request, send_file, url_for
 from flask_sock import Sock
@@ -29,6 +30,7 @@ from service.presentation import (
 from service.storage.database import database
 from service.storage.file_store import file_store
 from service.background_runtime import get_queue_status, run_async_operation, background_runtime
+from service.story_audio import create_story_audio_json, story_audio_directory
 
 configure_application_logging()
 
@@ -83,6 +85,39 @@ def handle_service_error(error):
 @app.get("/health")
 def health_check():
     return jsonify({"ok": True, "version": "7.9.0", "queue": run_async_operation(get_queue_status())})
+
+
+@app.get("/story-json")
+def story_json_page():
+    return render_template("story_json.html")
+
+
+@app.post("/api/story-audio-json")
+def create_story_audio_json_api():
+    payload = request.get_json(silent=True) or {}
+    story = str(payload.get("story", "")).strip()
+    if not story:
+        return jsonify({"detail": "Vui lòng dán nội dung truyện."}), 400
+    try:
+        result = run_async_operation(create_story_audio_json(story))
+    except RuntimeError as error:
+        return jsonify({"detail": str(error)}), 503
+    except (ValueError, json.JSONDecodeError) as error:
+        return jsonify({"detail": str(error)}), 502
+    except Exception as error:
+        app.logger.exception("Failed to create story audio JSON")
+        return jsonify({"detail": f"OpenAI không thể tạo file JSON: {error}"}), 502
+    return jsonify(result)
+
+
+@app.get("/data/audio/<filename>")
+def download_story_audio_json(filename):
+    if Path(filename).name != filename or not filename.endswith(".json"):
+        abort(404)
+    path = (story_audio_directory() / filename).resolve()
+    if path.parent != story_audio_directory().resolve() or not path.is_file():
+        abort(404)
+    return send_file(path, as_attachment=True, download_name=path.name, mimetype="application/json")
 
 
 # JSON API retained for scripts and integrations.

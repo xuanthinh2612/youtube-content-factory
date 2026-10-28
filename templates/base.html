@@ -10,11 +10,12 @@
 <body data-project-id="{{ project.id if request.endpoint == 'detail_page' else '' }}">
   <header class="topbar">
     <a class="brand" href="{{ url_for('home_page') }}"><span class="brand-mark">CF</span> Content Factory</a>
-    <nav aria-label="Điều hướng chính"><a href="{{ url_for('home_page') }}">Tạo project</a><a href="{{ url_for('list_page') }}">Projects</a></nav>
+    <nav aria-label="Điều hướng chính"><a href="{{ url_for('home_page') }}">Tạo project</a><a href="{{ url_for('list_page') }}">Projects</a><a href="{{ url_for('story_json_page') }}">Tạo JSON</a></nav>
   </header>
   <main class="page">{% block content %}{% endblock %}</main>
   {% if request.endpoint == 'detail_page' %}<script src="{{ url_for('static', filename='status.js') }}" defer></script>{% endif %}
   {% if request.endpoint == 'home_page' %}<script src="{{ url_for('static', filename='home.js') }}" defer></script>{% endif %}
   {% if request.endpoint == 'list_page' %}<script src="{{ url_for('static', filename='list.js') }}" defer></script>{% endif %}
+  {% if request.endpoint == 'story_json_page' %}<script src="{{ url_for('static', filename='story_json.js') }}" defer></script>{% endif %}
 </body>
 </html>

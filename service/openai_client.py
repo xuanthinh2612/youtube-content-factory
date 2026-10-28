@@ -28,7 +28,7 @@ openai_client = OpenAIResponsesClient()
 
 
 async def send_openai_response(
-    job: ProjectJob,
+    job: ProjectJob | None,
     agent_instructions: str,
     agent_input_text: str,
     output_format=None,
@@ -41,6 +41,6 @@ async def send_openai_response(
     }
     if output_format is not None:
         response_parameters["text"] = output_format
-    if job.provider != "openai":
+    if job is not None and job.provider != "openai":
         raise ValueError(f"Unsupported LLM provider for job {job.id}: {job.provider}")
     return await openai_client.create_response(response_parameters)
