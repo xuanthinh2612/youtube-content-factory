@@ -9,7 +9,7 @@ from service.settings import app_settings
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-FLOW_HUB_PROMPTS_DIR = Path(r"G:\MediaRepo\flow-hub\frontend\public")
+PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
 PROMPT_FILES = {
     "image": ("videoJsonCommonGuild.md", "jsonForImageGuild.md"),
     "video": ("videoJsonCommonGuild.md", "jsonForVideoGuild.md"),
@@ -87,7 +87,7 @@ async def create_story_project_json(project_type: str, content: str) -> dict:
 
     try:
         instructions = "\n\n".join(
-            (FLOW_HUB_PROMPTS_DIR / filename).read_text(encoding="utf-8")
+            (PROMPTS_DIR / filename).read_text(encoding="utf-8")
             for filename in PROMPT_FILES[project_type]
         )
     except OSError as error:
