@@ -31,6 +31,7 @@ from service.storage.database import database
 from service.storage.file_store import file_store
 from service.background_runtime import get_queue_status, run_async_operation, background_runtime
 from service.story_audio import create_story_audio_json, story_audio_directory
+from service.story_project_json import create_story_project_json, story_project_json_directory
 
 configure_application_logging()
 
@@ -108,6 +109,38 @@ def create_story_audio_json_api():
         app.logger.exception("Failed to create story audio JSON")
         return jsonify({"detail": f"OpenAI không thể tạo file JSON: {error}"}), 502
     return jsonify(result)
+
+
+@app.post("/api/story-project-json")
+def create_story_project_json_api():
+    payload = request.get_json(silent=True) or {}
+    content = payload.get("content", "")
+    project_type = payload.get("project_type", "")
+    if not isinstance(content, str) or not content.strip():
+        return jsonify({"detail": "Vui lòng dán nội dung cần tạo JSON."}), 400
+    if project_type not in ("image", "video"):
+        return jsonify({"detail": "Loại JSON không hợp lệ."}), 400
+    try:
+        result = run_async_operation(create_story_project_json(project_type, content))
+    except RuntimeError as error:
+        return jsonify({"detail": str(error)}), 503
+    except (ValueError, json.JSONDecodeError) as error:
+        return jsonify({"detail": str(error)}), 502
+    except Exception as error:
+        app.logger.exception("Failed to create story project JSON")
+        return jsonify({"detail": f"OpenAI không thể tạo file JSON: {error}"}), 502
+    return jsonify(result)
+
+
+@app.get("/data/project-json/<project_type>/<filename>")
+def download_story_project_json(project_type, filename):
+    if project_type not in ("image", "video") or Path(filename).name != filename or not filename.endswith(".json"):
+        abort(404)
+    directory = story_project_json_directory(project_type)
+    path = (directory / filename).resolve()
+    if path.parent != directory.resolve() or not path.is_file():
+        abort(404)
+    return send_file(path, as_attachment=True, download_name=path.name, mimetype="application/json")
 
 
 @app.get("/data/audio/<filename>")

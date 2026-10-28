@@ -1,27 +1,43 @@
 {% extends "base.html" %}
 {% block title %}Tạo JSON truyện · Content Factory{% endblock %}
 {% block content %}
-<header class="page-head centered"><h1>Tạo file JSON từ truyện</h1><p>Dán truyện hoàn chỉnh để tạo file Story Audio JSON theo prompt đã cung cấp.</p></header>
+<header class="page-head centered"><h1>Tạo file JSON từ nội dung</h1><p>Dán truyện hoặc kịch bản để tạo JSON audio, project ảnh hoặc project video.</p></header>
 <section class="panel story-json-panel" data-story-json-app>
   <div class="story-json-tabs" role="tablist" aria-label="Loại JSON">
     <button class="story-json-tab active" id="audio-tab" type="button" role="tab" aria-selected="true" aria-controls="audio-panel" data-tab="audio">Tạo JSON audio</button>
     <button class="story-json-tab" id="image-tab" type="button" role="tab" aria-selected="false" aria-controls="image-panel" data-tab="image">Tạo JSON image</button>
+    <button class="story-json-tab" id="video-tab" type="button" role="tab" aria-selected="false" aria-controls="video-panel" data-tab="video">Tạo JSON video</button>
   </div>
   <div id="audio-panel" role="tabpanel" aria-labelledby="audio-tab" data-panel="audio">
-    <form class="story-json-form" data-story-json-form>
+    <form class="story-json-form" data-audio-form>
       <label for="story-content">Nội dung truyện</label>
       <textarea id="story-content" name="story" rows="16" required placeholder="Dán toàn bộ nội dung truyện vào đây..."></textarea>
-      <p class="muted">AI sẽ dùng tiêu đề có sẵn trong truyện hoặc tự đặt tiêu đề hấp dẫn nếu chưa có. File được lưu trong <code>data/audio/</code> theo tên trong trường <code>story_name</code>.</p>
-      <div class="form-actions"><button class="button primary" type="submit" data-submit> Tạo JSON audio</button></div>
+      <p class="muted">Tạo Story Audio JSON. File được lưu trong <code>data/audio/</code> theo tên trong trường <code>story_name</code>.</p>
+      <div class="form-actions"><button class="button primary" type="submit" data-audio-submit>Tạo JSON audio</button></div>
     </form>
-    <p class="notice error" data-error hidden></p>
-    <section class="story-json-result" data-result hidden aria-live="polite">
-      <div class="row-between"><div><strong data-result-name></strong><p class="muted" data-result-path></p></div><a class="button" data-download>Tải file JSON</a></div>
-      <pre data-json-preview></pre>
+    <p class="notice error" data-audio-error hidden></p>
+    <section class="story-json-result" data-audio-result hidden aria-live="polite">
+      <div class="row-between"><div><strong data-audio-result-name></strong><p class="muted" data-audio-result-path></p></div><a class="button" data-audio-download>Tải file JSON</a></div>
+      <pre data-audio-preview></pre>
     </section>
   </div>
-  <div id="image-panel" class="image-tab-placeholder" role="tabpanel" aria-labelledby="image-tab" data-panel="image" hidden>
-    <h2>Tạo JSON image</h2><p class="muted">Tab này sẽ được xử lý trong lần cập nhật sau.</p>
+  {% for type, label, hint in [
+    ('image', 'image', 'Flow Hub Canvas project JSON cho hình ảnh'),
+    ('video', 'video', 'Flow Hub Canvas project JSON cho video')
+  ] %}
+  <div id="{{ type }}-panel" role="tabpanel" aria-labelledby="{{ type }}-tab" data-panel="{{ type }}" hidden>
+    <form class="story-json-form" data-project-form data-project-type="{{ type }}">
+      <label for="{{ type }}-content">Nội dung truyện hoặc audio JSON</label>
+      <textarea id="{{ type }}-content" name="content" rows="16" required placeholder="Dán truyện, kịch bản hoặc audio JSON vào đây..."></textarea>
+      <p class="muted">AI sẽ tạo {{ hint }} theo hướng dẫn Flow Hub và lưu file để tải xuống.</p>
+      <div class="form-actions"><button class="button primary" type="submit" data-project-submit>Tạo JSON {{ label }}</button></div>
+    </form>
+    <p class="notice error" data-project-error hidden></p>
+    <section class="story-json-result" data-project-result hidden aria-live="polite">
+      <div class="row-between"><div><strong data-project-result-name></strong><p class="muted" data-project-result-path></p></div><a class="button" data-project-download>Tải file JSON</a></div>
+      <pre data-project-preview></pre>
+    </section>
   </div>
+  {% endfor %}
 </section>
 {% endblock %}
