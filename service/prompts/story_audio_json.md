@@ -24,11 +24,11 @@ Giữ nguyên ngôn ngữ, ý nghĩa, diễn biến, chi tiết, lời thoại v
 
 ## Danh sách tag được phép
 
-Chỉ dùng tag chính xác trong các danh sách dưới đây; giữ nguyên chữ thường, dấu cách và ngoặc vuông. Không tự tạo tag mới, không dùng tag ngoài danh sách như `[sad]`, `[somber]`, `[coldly]`, `[smugly]`, `[hurt]` hoặc `[calmly]`.
+Chỉ dùng tag chính xác trong các danh sách dưới đây; giữ nguyên chữ thường, dấu cách và ngoặc vuông. Không tự tạo tag mới, không dùng tag ngoài danh sách như `[sad]`, `[somber]`, `[coldly]`, `[smugly]`, `[hurt]`.
 
 **Emotion**
 
-`[calm]` `[weak]` `[angry]` `[bored]` `[menacing]` `[playful]` `[tired]` `[excited]`
+ `[weak]` `[angry]` `[bored]` `[menacing]` `[playful]` `[tired]` `[excited]`
 
 **Vocalizations**
 
