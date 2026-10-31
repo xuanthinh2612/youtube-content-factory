@@ -11,6 +11,7 @@
   <div id="audio-panel" role="tabpanel" aria-labelledby="audio-tab" data-panel="audio">
     <form class="story-json-form" data-audio-form>
       <label for="story-content">Nội dung truyện</label>
+      <div class="story-json-import"><button class="button" type="button" data-import-button>Nhập file text</button><input type="file" data-import-file accept=".txt,.md,.markdown,.text,.json,.csv,.log,.yaml,.yml,.xml,.html,.css,.js,.py,.ts,.tsx,.jsx,.srt,.vtt,.lrc,text/plain,text/markdown,application/json,application/xml,application/yaml" hidden><span class="story-json-import-status" data-import-status role="status" aria-live="polite"></span></div>
       <textarea id="story-content" name="story" rows="16" required placeholder="Dán toàn bộ nội dung truyện vào đây..."></textarea>
       <p class="muted">Tạo Story Audio JSON. File được lưu trong <code>data/audio/</code> theo tên trong trường <code>story_name</code>.</p>
       <div class="form-actions"><button class="button primary" type="submit" data-audio-submit>Tạo JSON audio</button></div>
@@ -28,6 +29,7 @@
   <div id="{{ type }}-panel" role="tabpanel" aria-labelledby="{{ type }}-tab" data-panel="{{ type }}" hidden>
     <form class="story-json-form" data-project-form data-project-type="{{ type }}">
       <label for="{{ type }}-content">Nội dung truyện hoặc audio JSON</label>
+      <div class="story-json-import"><button class="button" type="button" data-import-button>Nhập file text</button><input type="file" data-import-file accept=".txt,.md,.markdown,.text,.json,.csv,.log,.yaml,.yml,.xml,.html,.css,.js,.py,.ts,.tsx,.jsx,.srt,.vtt,.lrc,text/plain,text/markdown,application/json,application/xml,application/yaml" hidden><span class="story-json-import-status" data-import-status role="status" aria-live="polite"></span></div>
       <textarea id="{{ type }}-content" name="content" rows="16" required placeholder="Dán truyện, kịch bản hoặc audio JSON vào đây..."></textarea>
       <p class="muted">AI sẽ tạo {{ hint }} theo hướng dẫn Flow Hub và lưu file để tải xuống.</p>
       <div class="form-actions"><button class="button primary" type="submit" data-project-submit>Tạo JSON {{ label }}</button></div>

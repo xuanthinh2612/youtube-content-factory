@@ -22,41 +22,58 @@ Giữ nguyên ngôn ngữ, ý nghĩa, diễn biến, chi tiết, lời thoại v
 8. Tạo ID liên tục, bắt đầu từ `seg_0001`, rồi `seg_0002`... Không trùng hoặc bỏ số. `speaker_id` của từng segment phải tồn tại trong `voices`.
 9. Giữ nguyên chính tả, dấu câu và chữ viết trong truyện. Đặt tag bên trong `text`, ngay trước phần cần diễn đạt theo tag. Khi cảm xúc thay đổi giữa câu, đặt tag mới đúng trước vế/cụm từ thay đổi; có thể dùng nhiều tag trong một segment. Không để tag làm mất hoặc thay thế nội dung câu chuyện.
 
-## Danh sách tag được phép
+## Hướng dẫn dùng ElevenLabs Audio Tags
 
-Chỉ dùng tag chính xác trong các danh sách dưới đây; giữ nguyên chữ thường, dấu cách và ngoặc vuông. Không tự tạo tag mới, không dùng tag ngoài danh sách như `[sad]`, `[somber]`, `[coldly]`, `[smugly]`, `[hurt]`.
+Audio Tag là chỉ dẫn diễn xuất dạng ngôn ngữ tự nhiên, đặt trong ngoặc vuông và chèn inline trong `text`. Các tag trong danh sách là ví dụ đã được ElevenLabs minh họa, không phải whitelist đóng. Có thể dùng tag tự mô tả bằng tiếng Anh nếu nó diễn đạt rõ âm thanh cần tạo. Bài viết nói về Eleven v4 và nêu Audio Tags cũng dùng được với Eleven v3 và Eleven v4 Turbo; mức độ tuân theo tag còn tùy model và voice.
 
-**Emotion**
+Tham khảo: [The Eleven v4 Audio Tags list: Try them, then write your own](https://elevenlabs.io/blog/elevenlabs-audio-tags-list).
 
- `[weak]` `[angry]` `[bored]` `[menacing]` `[playful]` `[tired]` `[excited]`
+### Emotion
 
-**Vocalizations**
+Các tag sau là ví dụ trên emotion wheel của ElevenLabs, hữu ích để chọn sắc thái gần nhất:
 
-`[clears throat]` `[coughing]` `[chuckling]` `[sighing]` `[sniffling]` `[yawning]` `[laughing]` `[sharp exhale]` `[scoffing]` `[humming]` `[panting]` `[gasping]`
+- **High energy:** `[excited]` `[playful]` `[amazed]` `[powerful]` `[proud]` `[optimistic]` `[startled]`
+- **Heated:** `[mad]` `[aggressive]` `[bitter]` `[critical]` `[repelled]`
+- **Tense:** `[anxious]` `[stressed]` `[scared]` `[threatened]` `[vulnerable]` `[confused]` `[busy]`
+- **Low energy:** `[tired]` `[bored]` `[distant]` `[despair]` `[let down]`
+- **Calm and reflective:** `[peaceful]` `[content]` `[curious]` `[thoughtful]` `[trusting]`
 
-**Delivery**
+Các ví dụ ngôn ngữ tự nhiên khác gồm `[joyful]`, `[happy]`, `[brave]`, `[thrilled]`, `[surprised]`, `[rageful]`, `[annoyed]`, `[frustrated]`, `[anxiety]`, `[afraid]`, `[panicked]`, `[uncertain]`, `[nervous]`, `[sorrowful]`, `[sad]`, `[regretful]`, `[serene]`, `[calm]`, `[satisfied]`, `[caring]`, `[compassionate]`, `[relieved]`, `[hopeful]`, `[serious]`, `[disappointed]`, `[disapproving]`, `[guilty]`, `[insecure]`, `[weak]`, `[menacing]`, `[awful]` và `[accepted]`. Đây là ví dụ thêm, không phải danh mục emotion wheel chính thức hay giới hạn toàn bộ tag có thể dùng.
 
-`[whispering]` `[singing]` `[slowly]` `[softly]` `[pause]` `[voice breaking]`
+### Delivery, volume và pacing
 
-**Character voice**
+Delivery/volume mô tả cách phát âm hoặc cường độ, độc lập với cảm xúc: `[whispers]`, `[shouts]`, `[whispering]`, `[shouting]`, `[singing]`, `[softly]`, `[quietly]`, `[hushed]`, `[barely audible]`, `[booming]`, `[low, threatening]`, `[voice breaking]`. Pacing mô tả tốc độ hoặc khoảng ngừng: `[slowly]`, `[rushed]`, `[snappy]`, `[speedy]`, `[drawn out]`, `[pause]`, `[long pause]`. Dùng dấu câu, dấu ba chấm, gạch ngang, xuống dòng và viết hoa để hỗ trợ nhịp tự nhiên; không thêm tag pacing nếu dấu câu đã đủ.
 
-`[sleepy drowsy voice]` `[witch voice]` `[drunken voice]`
+### Human-like reactions
 
-**Sound effects**
+Ví dụ: `[laughs]`, `[laughing]`, `[chuckles]`, `[chuckling]`, `[light chuckle]`, `[sighs]`, `[sighing]`, `[sigh of relief]`, `[gasps]`, `[gasping]`, `[clears throat]`, `[coughing]`, `[sniffling]`, `[yawning]`, `[sharp exhale]`, `[scoffing]`, `[humming]`, `[panting]`, `[gulp]`, `[groan]`, `[stammer]`, `[crying]`, `[starts crying]`. Chỉ thêm phản ứng nghe được khi truyện nêu rõ hoặc ngữ cảnh thể hiện trực tiếp phản ứng đó. Không biến hành động nhìn thấy được như mỉm cười thành tiếng cười nếu truyện không nói vậy.
 
-`[keyboard typing]` `[echoing]` `[knocking on door]` `[bell ringing]` `[phone ringing]` `[dog barking]` `[crowd cheering]` `[applause]` `[rain falling]` `[drum roll]` `[heartbeat]` `[engine starting]`
+### Accent và character voice
+
+Ví dụ: `[British accent]`, `[French accent]`, `[Australian accent]`, `[American accent]`, `[Irish accent]`, `[Kansai dialect]`, `[pirate voice]`, `[witch voice]`, `[sleepy drowsy voice]`, `[drunken voice]`. Chỉ gán accent, dialect hoặc persona khi người dùng/truyện yêu cầu hoặc nêu rõ; không suy đoán từ tên, ngoại hình hay nơi chốn và không dùng accent để thay đổi danh tính nhân vật.
+
+### Sound effects
+
+SFX là âm thanh phi lời nói được tạo trực tiếp trong audio. Ví dụ: `[thunder rumbling]`, `[footsteps]`, `[door creaking]`, `[knocking on door]`, `[clapping]`, `[applause]`, `[crowd cheering]`, `[owl hooting]`, `[twig snapping]`, `[many footsteps]`, `[zipper opening]`, `[dog barking]`, `[keyboard typing]`, `[bell ringing]`, `[phone ringing]`, `[rain falling]`, `[drum roll]`, `[heartbeat]`, `[engine starting]`, `[echoing]`. Chèn SFX ngay tại thời điểm sự kiện xảy ra trong truyện. Chỉ dùng âm thanh có căn cứ rõ trong nội dung; không tự thêm nhạc, ambience, tiếng động nền hoặc sự kiện mới để làm cảnh kịch tính hơn. Viết tag cụ thể để tránh nhầm hiệu ứng âm thanh với chỉ dẫn giọng nói.
+
+### Chọn, đặt và kết hợp tag
+
+- Đặt tag ngay trước từ, vế hoặc câu mà tag chi phối. Tag tiếp tục áp dụng cho phần lời phía sau cho đến khi có tag mới đổi trạng thái/cách thể hiện; không lặp tag ở mọi câu nếu sắc thái không đổi.
+- Chọn một emotion phù hợp cho mỗi nhịp/cụm lời. Khi cảm xúc chuyển rõ, đặt tag mới ngay trước nhịp chuyển. Không gắn nhiều cảm xúc mâu thuẫn lên cùng một từ hoặc cụm lời.
+- Emotion và delivery là hai lớp riêng, có thể kết hợp trong cùng một cặp ngoặc, phân cách bằng dấu phẩy, ví dụ `[whispering, fearful]` hoặc `[angry, shouting]`. Chỉ ghép khi cả hai đều có căn cứ; tránh xếp nhiều tag đồng nghĩa liên tiếp.
+- Nếu một tag đơn không đủ chính xác, dùng chỉ dẫn ngắn, cụ thể bằng tiếng Anh để kết hợp cảm xúc với cách thể hiện, tình huống hoặc sự chuyển biến, ví dụ `[tense, cautious]`, `[out of breath after running up the stairs]`, `[starting calm, then losing patience]`, `[a tired detective who has heard it all before]`.
+- Giữ đủ ngữ cảnh truyện trong các segment liền nhau để cảm xúc và chuyển biến dễ hiểu. Không tách segment chỉ để đổi tag; đặt tag inline đúng điểm đổi nhịp.
+- Dựa vào lời thoại, hành động, hoàn cảnh và diễn biến tâm lý. Không suy diễn quá mức, không chuyển cảm xúc của nhân vật sang người kể, và không ép mọi câu phải mang cảm xúc mạnh. Câu trung tính có thể không cần Emotion tag.
+- Nếu kết quả giọng đọc không khớp, chọn lại tag gần nghĩa hơn hoặc làm chỉ dẫn tự nhiên cụ thể hơn; không viết lại nội dung truyện để ép cách đọc.
 
 ## Quy tắc gắn tag và phân vai
 
-- Mỗi câu thoại và mỗi câu kể phải có ít nhất 1 tag Emotion đặt ngay đầu câu. Nếu một câu dài có chuyển biến cảm xúc, đặt thêm tag ngay trước vế chuyển biến; số tag phụ thuộc vào nhân vật và tình huống, không gắn dồn nhiều tag ở đầu câu khi chúng không áp dụng cho cả câu.
-- Gắn tag theo nhịp cảm xúc trong `text` của segment, Đặt tag Emotion ở đầu khối lời nói hoặc trước nhịp cần chỉ dẫn;
-- Với câu dài có nhiều vế hoặc nhịp cảm xúc khác nhau, dùng nhiều tag Emotion ngay trước từng vế/nhịp/câu để thể hiện đầy đủ diễn biến cảm xúc theo nhân vật, tình huống và hoàn cảnh. Mỗi lần cảm xúc chuyển rõ phải có tag mới. Nếu cả câu dài chỉ giữ một cảm xúc xuyên suốt thì không bịa thêm cảm xúc khác.
 - Chọn tag theo bằng chứng trong chính câu chuyện: lời nói, hành động, hoàn cảnh và chuyển biến tâm lý của nhân vật. Đừng gán cảm xúc chỉ vì nhân vật đang nói; đừng ép tag không phù hợp để làm câu kịch tính hơn.
-- Tag Emotion mô tả trạng thái nghe được phù hợp nhất trong danh sách cho phép. Không suy diễn sắc thái không có tag tương ứng thành tag mới.
+- Tag Emotion mô tả trạng thái nghe được phù hợp nhất; ưu tiên tag gợi ý ở trên, hoặc dùng chỉ dẫn cảm xúc ngắn bằng ngôn ngữ tự nhiên nếu không có tag gần nghĩa. Không gán cảm xúc trái với bằng chứng trong truyện.
 - Với `NARRATOR`, kể tự nhiên, cuốn hút và có sắc thái theo diễn biến, nhưng tiết chế cường độ để không lấn át câu chuyện. Chọn tag theo cảm xúc thực sự của lời kể; không chuyển nguyên cảm xúc mạnh của nhân vật sang người kể. Tránh diễn xuất quá kịch tính, nhưng không làm phẳng hồi hộp, xúc động, vui vẻ hoặc căng thẳng khi những sắc thái đó thực sự có trong lời kể.
 - Gom các câu liên tiếp của cùng một người nói vào chung segment và giữ các tag tại đúng vị trí trong chuỗi `text`. Không tạo segment mới chỉ vì câu dài đổi nhịp cảm xúc; dùng tag mới ngay trước vế đổi nhịp. Không đặt tất cả tag ở đầu segment nếu chúng chỉ áp dụng cho một phần.
-- Có thể kết hợp Emotion với Delivery khi cả hai đều có căn cứ, ví dụ `[weak] [whispering] ...`. Dùng `[pause]`, `[voice breaking]` và vocalization chỉ ở nơi ngắt nghỉ/phản ứng thực sự có ý nghĩa.
-- Tag Sound effects chỉ dùng khi truyện có âm thanh cụ thể cần thể hiện. Không tự thêm hiệu ứng nền, âm thanh hoặc sự kiện không có trong truyện. Tag hiệu ứng cũng phải nằm trong `text` tại vị trí cần phát.
+- Dùng vocalization chỉ ở nơi có phản ứng nghe được thực sự; pacing có thể phối hợp với dấu câu để tạo nhịp tự nhiên.
+- Sound-effect tag là âm thanh phi lời nói. Chèn tag ngay tại thời điểm âm thanh xảy ra; chỉ dùng khi truyện nêu hoặc hàm ý rõ âm thanh đó. Không tự thêm hiệu ứng nền, nhạc, âm thanh hoặc sự kiện mới.
 - Tag là chỉ dẫn cho giọng đọc, không phải từ được đọc thành lời. Không bọc tên nhân vật hoặc câu văn bình thường trong ngoặc vuông.
 - Gán mỗi đoạn kể cho voice người kể chuyện; gán lời thoại cho đúng nhân vật dựa vào ngữ cảnh. Nếu người nói không xác định được, không đoán tên: dùng một ID chưa biết nhất quán và ghi nhãn voice trung tính.
 
@@ -68,7 +85,7 @@ Thực hiện lượt kiểm tra cuối cùng một cách thầm lặng. Nếu p
 - Root có đúng `language`, `story_name`, `voices`, `segments`; không thiếu trường bắt buộc và không có trường thừa.
 - Mỗi voice có `name` và `elevenlabs_voice_id` dạng chuỗi; `name` luôn theo mẫu `ROMAJI-gender-age`, với giới tính là `male`, `female` hoặc `unknown` và tuổi là số hoặc `unknown`; mỗi segment có `id`, `speaker_id`, `text` dạng chuỗi.
 - ID segment liên tục, duy nhất; mọi `speaker_id` đều có trong `voices`.
-- Mọi tag đều thuộc đúng danh sách cho phép và được viết chính xác; tag đặt đúng vị trí, không mâu thuẫn với cảm xúc/lời thoại.
+- Mọi tag đều là chỉ dẫn audio rõ ràng trong ngoặc vuông; tag nằm trong `text`, đặt đúng vị trí và phù hợp với ngữ cảnh. Kiểm tra tag ghép dùng dấu phẩy bên trong một cặp ngoặc; không coi danh sách ví dụ là whitelist đóng.
 - Các câu liền nhau của cùng người nói được gom vào segment; nhịp đổi cảm xúc trong câu dài được đánh dấu bằng tag mới đúng vị trí.
 - Truyện không bị dịch, viết lại, đảo thứ tự, lược bỏ hoặc tự ý bổ sung. Đối chiếu từ đầu đến cuối với nội dung người dùng đưa.
 - Kết quả cuối không có gì ngoài JSON để người dùng lưu trực tiếp thành file `.json`.
@@ -78,12 +95,12 @@ Thực hiện lượt kiểm tra cuối cùng một cách thầm lặng. Nếu p
 - Giữ thứ tự các trường root chính xác như sau: `language`, `story_name`, `voices`, `segments`.
 - Mỗi phần tử trong `segments` bắt buộc phải có đúng ba trường `id`, `speaker_id`, `text`; không thêm bất kỳ trường nào khác. Emotion, delivery và sound-effect tag phải nằm trong chuỗi `text`, không tạo trường riêng cho tag.
 
-- Trước khi trả lời, hãy rà soát lại toàn bộ JSON từ đầu đến cuối: kiểm tra đúng bốn trường root theo đúng thứ tự; mọi voice chỉ có `name` và `elevenlabs_voice_id`; mọi segment chỉ có `id`, `speaker_id`, `text`; ID segment liên tục; mọi `speaker_id` đều tồn tại trong `voices`; tag nằm trong `text` và thuộc whitelist. Tự sửa mọi lỗi tìm thấy rồi mới trả về.
+- Trước khi trả lời, hãy rà soát lại toàn bộ JSON từ đầu đến cuối: kiểm tra đúng bốn trường root theo đúng thứ tự; mọi voice chỉ có `name` và `elevenlabs_voice_id`; mọi segment chỉ có `id`, `speaker_id`, `text`; ID segment liên tục; mọi `speaker_id` đều tồn tại trong `voices`; tag nằm trong `text` và là chỉ dẫn audio rõ ràng trong ngoặc vuông. Ưu tiên tag gợi ý; tag tự mô tả phải phù hợp và dễ hiểu. Tự sửa mọi lỗi tìm thấy rồi mới trả về.
 - Trả về duy nhất JSON theo schema đầu ra, không thêm markdown hoặc lời giải thích.
 
 ## Mẫu cấu trúc đầu ra
 
-Đây là mẫu cấu trúc và cách đặt tag. Khi làm thật, thay nội dung ví dụ bằng nhân vật và câu chuyện người dùng cung cấp; chỉ dùng tag trong whitelist bên trên.
+Đây là mẫu cấu trúc và cách đặt tag. Khi làm thật, thay nội dung ví dụ bằng nhân vật và câu chuyện người dùng cung cấp; ưu tiên các tag gợi ý ở trên, có thể dùng chỉ dẫn audio tự mô tả phù hợp.
 
 {
   "language": "ja-JP",

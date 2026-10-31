@@ -30,15 +30,53 @@
     }
   }
 
+  function setupFileImport(form, textarea) {
+    const button = form.querySelector("[data-import-button]");
+    const fileInput = form.querySelector("[data-import-file]");
+    const status = form.querySelector("[data-import-status]");
+    const submit = form.querySelector('button[type="submit"]');
+    button.addEventListener("click", () => fileInput.click());
+    fileInput.addEventListener("change", async () => {
+      const file = fileInput.files?.[0];
+      if (!file) return;
+      button.disabled = true;
+      submit.disabled = true;
+      fileInput.disabled = true;
+      textarea.disabled = true;
+      status.textContent = `Đang đọc ${file.name}…`;
+      try {
+        textarea.value = await file.text();
+        textarea.dispatchEvent(new Event("input", { bubbles: true }));
+        status.textContent = `Đã nhập ${file.name}`;
+        textarea.focus();
+      } catch {
+        status.textContent = `Không đọc được file ${file.name}.`;
+      } finally {
+        textarea.disabled = false;
+        button.disabled = false;
+        submit.disabled = false;
+        fileInput.disabled = false;
+        fileInput.value = "";
+      }
+    });
+  }
+
   const audioForm = app.querySelector("[data-audio-form]");
+  setupFileImport(audioForm, audioForm.elements.story);
   audioForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     const submit = app.querySelector("[data-audio-submit]");
+    const textarea = audioForm.elements.story;
+    const importButton = audioForm.querySelector("[data-import-button]");
+    const fileInput = audioForm.querySelector("[data-import-file]");
     const errorBox = app.querySelector("[data-audio-error]");
     const result = app.querySelector("[data-audio-result]");
     errorBox.hidden = true;
     result.hidden = true;
     submit.disabled = true;
+    textarea.disabled = true;
+    importButton.disabled = true;
+    fileInput.disabled = true;
     submit.textContent = "Đang tạo JSON…";
     try {
       const response = await fetch("/api/story-audio-json", {
@@ -59,21 +97,31 @@
       errorBox.hidden = false;
     } finally {
       submit.disabled = false;
+      textarea.disabled = false;
+      importButton.disabled = false;
+      fileInput.disabled = false;
       submit.textContent = "Tạo JSON audio";
     }
   });
 
   app.querySelectorAll("[data-project-form]").forEach((form) => {
+    setupFileImport(form, form.elements.content);
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       const projectType = form.dataset.projectType;
       const submit = form.querySelector("[data-project-submit]");
+      const textarea = form.elements.content;
+      const importButton = form.querySelector("[data-import-button]");
+      const fileInput = form.querySelector("[data-import-file]");
       const panel = form.closest("[data-panel]");
       const errorBox = panel.querySelector("[data-project-error]");
       const result = panel.querySelector("[data-project-result]");
       errorBox.hidden = true;
       result.hidden = true;
       submit.disabled = true;
+      textarea.disabled = true;
+      importButton.disabled = true;
+      fileInput.disabled = true;
       submit.textContent = `Đang tạo JSON ${projectType}…`;
       try {
         const response = await fetch("/api/story-project-json", {
@@ -94,6 +142,9 @@
         errorBox.hidden = false;
       } finally {
         submit.disabled = false;
+        textarea.disabled = false;
+        importButton.disabled = false;
+        fileInput.disabled = false;
         submit.textContent = `Tạo JSON ${projectType}`;
       }
     });
