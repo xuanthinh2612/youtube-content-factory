@@ -17,7 +17,7 @@ Giữ nguyên ngôn ngữ, ý nghĩa, diễn biến, chi tiết, lời thoại v
 3. Không thêm `duration`, `start_time`, `end_time`, metadata project, khóa ngoài mẫu, hoặc comment.
 4. Chọn mã ngôn ngữ BCP-47 phù hợp với ngôn ngữ của câu chuyện, ví dụ `ja-JP`, `vi-VN`, `en-US`. Không dịch câu chuyện để đổi ngôn ngữ.
 5. Tạo một voice cho mỗi nhân vật thực sự nói và một voice cho người kể chuyện nếu truyện có lời dẫn. Dùng `speaker_id` ngắn, ổn định, viết hoa, không dấu, ví dụ `MISAKI`, `TAKUYA`, `NARRATOR`. Mỗi voice có đúng hai trường `name` và `elevenlabs_voice_id`; để `elevenlabs_voice_id` là chuỗi rỗng trừ khi người dùng đã cung cấp ID.
-6. Đặt tên voice ngắn gọn, nhận diện được nhân vật; có thể kèm vai trò/độ tuổi/giới tính nếu truyện nêu rõ. Không tự bịa tên, tuổi, giới tính hoặc đặc điểm nhân vật. Nếu tên không rõ, dùng nhãn vai trò nhất quán như `NARRATOR` hoặc `UNKNOWN_SPEAKER`.
+6. Trường `name` của mọi voice bắt buộc theo định dạng `ROMAJI-gender-age`, ví dụ `MISAKI-female-35`. Phần tên phải là tên nhân vật viết bằng chữ Latin theo romaji (nếu tên gốc là tiếng Nhật, dùng cách chuyển tự romaji nhất quán), viết HOA và không dấu cách; với người kể chuyện hoặc người nói không rõ tên, dùng nhãn nhận diện nhất quán như `NARRATOR` hoặc `UNKNOWN_SPEAKER`. `gender` bắt buộc là `male`, `female` hoặc `unknown`; `age` bắt buộc là số tuổi dạng chữ số hoặc `unknown`. Chỉ ghi tuổi và giới tính khi truyện nêu rõ hoặc xác định chắc chắn từ nội dung; không tự bịa. Nếu không xác định được, vẫn giữ đúng định dạng và điền `unknown` cho phần chưa biết, ví dụ `NARRATOR-unknown-unknown` hoặc `MISAKI-female-unknown`. Không để thiếu giới tính hay tuổi trong `name`.
 7. Chia truyện thành các segment theo khối lời nói liên tục của cùng một người. Gộp các câu liền nhau do cùng nhân vật nói hoặc cùng người kể dẫn chuyện vào một segment; không tách mỗi câu thành một segment riêng. Một segment chỉ thuộc về duy nhất một người nói, không gộp lời kể với lời thoại. Bắt đầu segment mới khi đổi người nói; chỉ tách cùng một khối lời nói nếu chuyển cảnh/đoạn lớn hoặc nội dung quá dài để đọc tự nhiên. Giữ nguyên thứ tự và toàn bộ nội dung truyện.
 8. Tạo ID liên tục, bắt đầu từ `seg_0001`, rồi `seg_0002`... Không trùng hoặc bỏ số. `speaker_id` của từng segment phải tồn tại trong `voices`.
 9. Giữ nguyên chính tả, dấu câu và chữ viết trong truyện. Đặt tag bên trong `text`, ngay trước phần cần diễn đạt theo tag. Khi cảm xúc thay đổi giữa câu, đặt tag mới đúng trước vế/cụm từ thay đổi; có thể dùng nhiều tag trong một segment. Không để tag làm mất hoặc thay thế nội dung câu chuyện.
@@ -66,7 +66,7 @@ Thực hiện lượt kiểm tra cuối cùng một cách thầm lặng. Nếu p
 
 - JSON parse được, dấu ngoặc/phẩy/nháy kép hợp lệ; không có dấu phẩy cuối.
 - Root có đúng `language`, `story_name`, `voices`, `segments`; không thiếu trường bắt buộc và không có trường thừa.
-- Mỗi voice có `name` và `elevenlabs_voice_id` dạng chuỗi; mỗi segment có `id`, `speaker_id`, `text` dạng chuỗi.
+- Mỗi voice có `name` và `elevenlabs_voice_id` dạng chuỗi; `name` luôn theo mẫu `ROMAJI-gender-age`, với giới tính là `male`, `female` hoặc `unknown` và tuổi là số hoặc `unknown`; mỗi segment có `id`, `speaker_id`, `text` dạng chuỗi.
 - ID segment liên tục, duy nhất; mọi `speaker_id` đều có trong `voices`.
 - Mọi tag đều thuộc đúng danh sách cho phép và được viết chính xác; tag đặt đúng vị trí, không mâu thuẫn với cảm xúc/lời thoại.
 - Các câu liền nhau của cùng người nói được gom vào segment; nhịp đổi cảm xúc trong câu dài được đánh dấu bằng tag mới đúng vị trí.
@@ -90,15 +90,15 @@ Thực hiện lượt kiểm tra cuối cùng một cách thầm lặng. Nếu p
   "story_name": "xxxxxxxxxxxxxxxxxxxxxxxxxx",
   "voices": {
     "MISAKI": {
-      "name": "MISAKI-young-female美咲",
+      "name": "MISAKI-female-35",
       "elevenlabs_voice_id": ""
     },
     "TAKUYA": {
-      "name": "TAKUYA-middle_age_male拓也",
+      "name": "TAKUYA-male-30",
       "elevenlabs_voice_id": ""
     },
     "RINA": {
-      "name": "RINA-old_female莉奈",
+      "name": "RINA-female-30",
       "elevenlabs_voice_id": ""
     }
   },
